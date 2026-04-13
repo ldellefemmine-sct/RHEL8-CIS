@@ -12,9 +12,7 @@
         state: present
 
     - name: Enable chronyd service
-      ansible.builtin.systemd_service:
-        name: chronyd
-        enabled: true
+      ansible.builtin.command: systemctl enable chronyd
 
   tasks:
     - import_role:
@@ -24,12 +22,6 @@
           - level2-server
 
   post_tasks:
-    - name: Remove packages
-      ansible.builtin.dnf:
-        state: absent
-        name:
-          - python3-pip
-
     - name: Remove dependencies that are no longer required and purge their configuration files
       ansible.builtin.dnf:
         autoremove: yes
