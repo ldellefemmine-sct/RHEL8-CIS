@@ -17,6 +17,8 @@
   tasks:
     - import_role:
         name: "{{ playbook_dir }}"
+      vars:
+        rhel8cis_rule_5_2_4: false
       tags:
         - level1-server
         - level2-server
