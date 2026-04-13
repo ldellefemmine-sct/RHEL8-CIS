@@ -19,6 +19,7 @@
         name: "{{ playbook_dir }}"
       vars:
         rhel8cis_rule_5_2_4: false
+        rhel8cis_authselect_custom_profile_name: openstack
       tags:
         - level1-server
         - level2-server
