@@ -1,7 +1,54 @@
 ---
 
 - name: Run RHEL8 CIS hardening
-  hosts: all
+  hosts: localhost
   become: true
-  roles:
-    - role: "{{ playbook_dir }}"
+
+  pre_tasks:
+    - name: Install packages
+      ansible.builtin.dnf:
+        name:
+          - chrony
+        state: present
+
+    - name: Enable chronyd service
+      ansible.builtin.systemd_service:
+        name: chronyd
+        enabled: true
+
+  tasks:
+    - import_role:
+        name: "{{ playbook_dir }}"
+        tags:
+          - level1-server
+          - level2-server
+
+  post_tasks:
+    - name: Remove packages
+      ansible.builtin.dnf:
+        state: absent
+        name:
+          - python3-pip
+
+    - name: Remove dependencies that are no longer required and purge their configuration files
+      ansible.builtin.dnf:
+        autoremove: yes
+
+    - name: Run the equivalent of "apt-get clean" as a separate step
+      ansible.builtin.command: "dnf clean all"
+
+    - name: Remove ssh key and directory
+      ansible.builtin.file:
+        state: absent
+        path: '{{ item }}'
+      with_items:
+        - /var/lib/apt/lists/
+        - /etc/ssh/ssh_host_*
+        - /home/ubuntu/.ssh/
+        - /root/.ansible
+
+    - name: Clean up cloudinit
+      ansible.builtin.command: cloud-init clean
+
+    - name: Shutdown
+      community.general.shutdown:
