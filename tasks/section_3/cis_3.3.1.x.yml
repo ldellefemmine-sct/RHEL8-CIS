@@ -274,8 +274,6 @@
         path: "{{ item.path }}"
         regexp: ^(net.ipv4.conf.default.rp_filter)
         replace: '#\1'
-      failed_when: discovered_file_exists.rc not in [ 0, 257 ]
-      register: discovered_file_exists
       loop: "{{ sysctl_files.files }}"
 
     - name: "3.3.1.13 | PATCH | Ensure net.ipv4.conf.default.rp_filter is configured | Set Fact"
