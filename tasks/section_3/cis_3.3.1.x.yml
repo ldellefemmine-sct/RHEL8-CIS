@@ -261,16 +261,22 @@
     - CCI-000366
     - NIST800-53R5_CM-6
   block:
+    - name: "3.3.1.13 | PATCH | Ensure net.ipv4.conf.default.rp_filter is configured | Get sysctl config file list"
+      ansible.builtin.find:
+        follow: true
+        path: "/lib/sysctl.d/"
+        use_regex: true
+        patterns: '.*\.conf'
+      register: sysctl_files
+
     - name: "3.3.1.13 | PATCH | Ensure net.ipv4.conf.default.rp_filter is configured | remove from other files"
       ansible.builtin.replace:
-        path: "{{ item }}"
+        path: "{{ item.path }}"
         regexp: ^(net.ipv4.conf.default.rp_filter)
         replace: '#\1'
       failed_when: discovered_file_exists.rc not in [ 0, 257 ]
       register: discovered_file_exists
-      loop:
-        - '/lib/sysctl.d/50-default.conf'
-        - '/lib/sysctl.d/50-redhat.conf'
+      loop: "{{ sysctl_files.files }}"
 
     - name: "3.3.1.13 | PATCH | Ensure net.ipv4.conf.default.rp_filter is configured | Set Fact"
       ansible.builtin.set_fact:

@@ -37,11 +37,5 @@
       with_items:
         - /var/lib/apt/lists/
         - /etc/ssh/ssh_host_*
-        - /home/ubuntu/.ssh/
+        - /home/almalinux/.ssh/
         - /root/.ansible
-
-    - name: Clean up cloudinit
-      ansible.builtin.command: cloud-init clean
-
-    - name: Shutdown
-      community.general.shutdown:
