@@ -23,20 +23,12 @@
     - name: Enable chronyd service
       ansible.builtin.command: systemctl enable chronyd
 
-  tasks:
-    - name: Remove dependencies that are no longer required and purge their configuration files
-      ansible.builtin.dnf:
-        autoremove: yes
-
-    - name: Run the equivalent of "dnf clean" as a separate step
-      ansible.builtin.command: "dnf clean all"
-
+  post_tasks:
     - name: Remove ssh key and directory
       ansible.builtin.file:
         state: absent
         path: '{{ item }}'
       with_items:
-        - /var/lib/apt/lists/
         - /etc/ssh/ssh_host_*
         - /home/almalinux/.ssh/*
         - /root/.ansible
