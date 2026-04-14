@@ -17,6 +17,7 @@
       ansible.builtin.dnf:
         name:
           - chrony
+          - qemu-guest-agent
         state: present
 
     - name: Enable chronyd service
@@ -37,5 +38,5 @@
       with_items:
         - /var/lib/apt/lists/
         - /etc/ssh/ssh_host_*
-        - /home/almalinux/.ssh/
+        - /home/almalinux/.ssh/*
         - /root/.ansible
