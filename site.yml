@@ -3,6 +3,14 @@
 - name: Run RHEL8 CIS hardening
   hosts: localhost
   become: true
+  roles:
+    - role: "{{ playbook_dir }}"
+      vars:
+        rhel8cis_rule_5_2_4: false
+        rhel8cis_authselect_custom_profile_name: openstack
+      tags:
+        - level1-server
+        - level2-server
 
   pre_tasks:
     - name: Install packages
@@ -15,16 +23,6 @@
       ansible.builtin.command: systemctl enable chronyd
 
   tasks:
-    - import_role:
-        name: "{{ playbook_dir }}"
-      vars:
-        rhel8cis_rule_5_2_4: false
-        rhel8cis_authselect_custom_profile_name: openstack
-      tags:
-        - level1-server
-        - level2-server
-
-  post_tasks:
     - name: Remove dependencies that are no longer required and purge their configuration files
       ansible.builtin.dnf:
         autoremove: yes
