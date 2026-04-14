@@ -29,7 +29,7 @@
       ansible.builtin.dnf:
         autoremove: yes
 
-    - name: Run the equivalent of "apt-get clean" as a separate step
+    - name: Run the equivalent of "dnf clean" as a separate step
       ansible.builtin.command: "dnf clean all"
 
     - name: Remove ssh key and directory
