@@ -31,4 +31,3 @@
       with_items:
         - /etc/ssh/ssh_host_*
         - /home/almalinux/.ssh
-        - /root/.ansible
