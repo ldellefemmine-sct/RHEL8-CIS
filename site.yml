@@ -6,8 +6,10 @@
   roles:
     - role: "{{ playbook_dir }}"
       vars:
+        rhel8cis_rule_1_2_1_1: false
         rhel8cis_rule_5_2_4: false
-        rhel8cis_authselect_custom_profile_name: openstack
+        rhel8cis_authselect_custom_profile_name: cis_os_hardened
+        rhel8cis_firewall: sg
       tags:
         - level1-server
         - level2-server
